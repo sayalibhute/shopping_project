@@ -1,0 +1,33 @@
+/* command-bar.css */
+
+.command-bar {
+  position: fixed;
+  top: 70px;
+  padding: 1rem 0.75rem;
+  width: calc(100% - 190px);
+}
+
+.command-bar-inner {
+  background-color: #2a2e57;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  border-radius: 0.75rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Responsive override for small screens */
+@media (max-width: 768px) and (max-width: 967px) {
+  .command-bar {
+    width: calc(100% - 34px) !important; /* Ensure it takes full width on small screens */
+  }
+}
+
+ 
+  
+  @media screen and (max-width: 480px) {
+     .command-bar {
+    width: calc(100% - 34px) !important; /* Ensure it takes full width on small screens */
+  }
+  }

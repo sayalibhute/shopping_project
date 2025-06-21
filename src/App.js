@@ -6,6 +6,7 @@ import ProductPage from './pages/ProductPage';
 import RegisterPage from './pages/RegistersPages'
 import LoginPage from './pages/LoginPage';
 import LogOut from './pages/LogOut'
+import NoteScreen from './noteTable/NoteScreen';
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
         <Route path="/register" element={<RegisterPage />} />
         <Route path='/product/:id' element={<ProductPage />} />
         <Route path='/logout' element={<LogOut/>}/>
+        <Route path="/notescreen" element={<NoteScreen />} />
 
         <Route path="cart" element={<CartPage />} />
       </Route>

@@ -5,7 +5,7 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { Provider } from 'react-redux';
 import store from './redux/store';
-import { BrowserRouter } from 'react-router-dom'; // ✅ Import BrowserRouter
+import { BrowserRouter } from 'react-router-dom'; 
 
 // Bootstrap
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -16,7 +16,7 @@ root.render(
   <React.StrictMode>
     <Provider store={store}>
       <BrowserRouter> 
-        <App />
+       <App />
       </BrowserRouter>
     </Provider>
   </React.StrictMode>

@@ -140,3 +140,44 @@ body, html {
     background-color:#2a2e57;
     border-radius: 12px;
   }
+
+  .content {
+    flex: 1;
+    padding: 20px;
+    overflow-x: hidden;
+    width: 100%;
+    max-width: 100%;
+    margin: 0 auto;
+  }
+  
+  /* Media Queries for content responsiveness */
+  @media screen and (max-width: 1200px) {
+    .content {
+      padding: 15px;
+    }
+  }
+  
+  @media screen and (max-width: 768px) {
+    .content {
+      padding: 10px;
+    }
+  
+    .layout .main {
+      width: 100%;
+    }
+  }
+  
+  @media screen and (max-width: 480px) {
+    .content {
+      padding: 8px;
+    }
+  
+    .layout {
+      flex-direction: column;
+    }
+  
+    .main {
+      margin-left: 0;
+      width: 100%;
+    }
+  }

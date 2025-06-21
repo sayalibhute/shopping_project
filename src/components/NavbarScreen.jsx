@@ -23,9 +23,8 @@ const NavbarScreen = () => {
           <nav className="nav-links">
             {/* <Link to="/register">Dashboard</Link>
             <Link to="/login">Profile</Link> */}
-            <Link to="/cart">Settings</Link>
-             <Link to="/login">Login</Link>
-       
+            {/* <Link to="/cart">Settings</Link> */}
+             <Link to="/notescreen">Add the notes</Link>
 
           </nav>
  

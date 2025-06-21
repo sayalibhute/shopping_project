@@ -27,7 +27,7 @@ function ProductPage() {
     return (
 
         <Row>
-            <Col md={6}>
+            <Col md={6}className="p-[200px]">
                 <Image src={product.image} alt={product.name} fluid />
             </Col>
             <Col md={3}>
