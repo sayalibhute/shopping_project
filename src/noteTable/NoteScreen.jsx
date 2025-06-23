@@ -17,12 +17,12 @@ const NoteScreen = () => {
     {/* Left */}
     <div className="text-white flex gap-2 items-center">
       <span className="text-lg font-bold">+</span>
-      <span className="opacity-80">Note Screen</span>
+      <h1 className="opacity-80 m-1">Note Screen</h1>
     </div>
 
 
     {/* Right */}
-    <div className="text-white flex gap-2 items-center">
+    <div className="text-white flex gap-2 items-center h-10">
       <button 
                             onClick={() => setIsModalOpen(true)}
                             className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600"

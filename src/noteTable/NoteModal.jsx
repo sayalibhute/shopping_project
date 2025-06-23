@@ -1,19 +1,39 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { saveUser } from '../redux/slices/Userslice';
+import { saveUser, fetchUsersUpdate } from '../redux/slices/Userslice';
 
-const NoteModal = ({ isOpen, onClose }) => {
+const NoteModal = ({ isOpen, onClose, userToEdit }) => {
     const dispatch = useDispatch();
     const { error } = useSelector((state) => state.users || {});
     const [formData, setFormData] = useState({
-        id: Date.now(), // Add unique ID
+        id: Date.now(),
         name: '',
         address: '',
         mobileNo: '',
         email: ''
     });
-
     const [errors, setErrors] = useState({});
+
+    // Populate form when editing
+    useEffect(() => {
+        if (userToEdit) {
+            setFormData({
+                _id: userToEdit._id || userToEdit.id || '',
+                name: userToEdit.name || '',
+                address: userToEdit.address || '',
+                mobileNo: userToEdit.mobileNo || '',
+                email: userToEdit.email || ''
+            });
+        } else {
+            setFormData({
+                id: Date.now(),
+                name: '',
+                address: '',
+                mobileNo: '',
+                email: ''
+            });
+        }
+    }, [userToEdit, isOpen]);
 
     const validateForm = () => {
         const newErrors = {};
@@ -46,17 +66,20 @@ const NoteModal = ({ isOpen, onClose }) => {
         e.preventDefault();
         if (validateForm()) {
             try {
-                const result = await dispatch(saveUser(formData)).unwrap();
-                if (result) {
-                    setFormData({
-                        id: Date.now(),
-                        name: '',
-                        address: '',
-                        mobileNo: '',
-                        email: ''
-                    });
-                    onClose();
+                if (userToEdit) {
+                    await dispatch(fetchUsersUpdate(formData)).unwrap();
+                } else {
+                    const { _id, id, ...newUserData } = formData;
+                    await dispatch(saveUser(newUserData)).unwrap();
                 }
+                setFormData({
+                    id: Date.now(),
+                    name: '',
+                    address: '',
+                    mobileNo: '',
+                    email: ''
+                });
+                onClose();
             } catch (error) {
                 setErrors(prev => ({
                     ...prev,
@@ -72,13 +95,11 @@ const NoteModal = ({ isOpen, onClose }) => {
         <div className="fixed inset-0  bg-opacity-50 bg-[#2a2e57] flex items-center justify-center">
             <div className="bg-[#113a7d] rounded-lg p-8 w-full max-w-md">
                 <div className="flex justify-between items-center mb-6">
-                    <h2 className="text-2xl font-bold">Add New Note</h2>
+                    <h2 className="text-2xl font-bold">{userToEdit ? 'Edit Note' : 'Add New Note'}</h2>
                     <button 
                         onClick={onClose}
                         className="text-white hover:text-gray-700 text-2xl font-bold"
-                    >
-                        ×
-                    </button>
+                    >×</button>
                 </div>
                 <form onSubmit={handleSubmit}>
                     <div className="mb-4">
@@ -133,15 +154,15 @@ const NoteModal = ({ isOpen, onClose }) => {
                         <button
                             type="button"
                             onClick={onClose}
-                            className="px-4 py-2 text-white hover:bg-gray-100  hover:bg-black rounded"
+                            className="px-4 py-2 text-black bg-gray-100 rounded"
                         >
                             Cancel
                         </button>
                         <button
                             type="submit"
-                            className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                            className="px-4 py-2 bg-blue-500 text-black rounded hover:bg-blue-600"
                         >
-                            Submit
+                            {userToEdit ? 'Update' : 'Submit'}
                         </button>
                     </div>
                 </form>

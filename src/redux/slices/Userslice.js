@@ -3,12 +3,11 @@ import axios from 'axios';
 
 
 // API endpoint
-const API_URL = 'http://localhost:5000/api/users';
 
 // Async thunk for saving user data
 export const saveUser = createAsyncThunk('users/saveUser',async (userData) => {
         try {
-            const response = await axios.post(API_URL, userData);
+            const response = await axios.post('http://localhost:5000/api/users', userData);
             return response.data;
         } catch (error) {
             throw Error(error.response.data.message);
@@ -36,6 +35,26 @@ export const fetchUsersDelete = createAsyncThunk(
     }
   }
 );
+export const fetchUsersUpdate = createAsyncThunk(
+  'users/fetchUsersUpdate',
+  async (userData, thunkAPI) => {
+    const id = userData._id; // Always use _id for MongoDB
+    if (!id) {
+      return thunkAPI.rejectWithValue('User ID (_id) is required for update');
+    }
+    try {
+      await axios.put(`http://localhost:5000/api/users/${id}`, userData);
+      return { ...userData, _id: id }; // Ensure _id is present in payload
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || error.message || 'Update failed'
+      );
+    }
+  }
+);
+
+
+
 
 
 
@@ -89,7 +108,23 @@ const userSlice = createSlice({
     state.status = 'false';
     state.error = action.error.message;
 });
-
+// Update user
+        builder
+            .addCase(fetchUsersUpdate.pending, (state) => {
+                state.status = 'true';
+            })
+            .addCase(fetchUsersUpdate.fulfilled, (state, action) => {
+                state.loading = false;
+      // Update the user in the state.users array
+      const index = state.users.findIndex(user => user._id === action.payload._id);
+      if (index !== -1) {
+        state.users[index] = action.payload;
+      }
+    })
+            .addCase(fetchUsersUpdate.rejected, (state, action) => {
+                state.status = 'false';
+                state.error = action.error.message;
+            });
         
     }
 });
