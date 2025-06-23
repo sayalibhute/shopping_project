@@ -25,6 +25,19 @@ export const saveUser = createAsyncThunk('users/saveUser',async (userData) => {
   
 });
 
+export const fetchUsersDelete = createAsyncThunk(
+  'users/fetchUsersDelete',
+  async (id, thunkAPI) => {
+    try {
+      await axios.delete(`http://localhost:5000/api/users/${id}`);
+      return id; // Return the id to remove it from the Redux store
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response?.data?.message || 'Delete failed');
+    }
+  }
+);
+
+
 
 
 const userSlice = createSlice({
@@ -62,6 +75,21 @@ const userSlice = createSlice({
     state.status = 'false';
     state.error = action.error.message;
 })
+
+//delete user
+.addCase(fetchUsersDelete.pending, (state) => {
+    state.status = 'true';
+})
+
+.addCase(fetchUsersDelete.fulfilled, (state, action) => {
+    state.status = 'false';
+    state.users = state.users.filter(user => user._id !== action.payload);
+})
+.addCase(fetchUsersDelete.rejected, (state, action) => {
+    state.status = 'false';
+    state.error = action.error.message;
+});
+
         
     }
 });

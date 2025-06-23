@@ -1,27 +1,28 @@
 import React,{useMemo,useEffect} from 'react';
 import {useTable} from 'react-table';
 import { useSelector ,useDispatch} from 'react-redux';
-import { fetchUsers } from '../redux/slices/Userslice';
+import { fetchUsers ,fetchUsersDelete} from '../redux/slices/Userslice';
+import { ToastContainer, toast } from 'react-toastify';
 
-const columns = [
+// const columns = [
  
-    {
-        Header: "Full Name",
-        accessor: "name"
-    },
-    {
-        Header: "Email",
-        accessor: "email"
-    },
-    {
-        Header: "IP Address",
-        accessor: "address"
-    },
-    {
-        Header: "Phone",
-        accessor: "mobileNo"
-    }
-];
+//     {
+//         Header: "Full Name",
+//         accessor: "name"
+//     },
+//     {
+//         Header: "Email",
+//         accessor: "email"
+//     },
+//     {
+//         Header: "IP Address",
+//         accessor: "address"
+//     },
+//     {
+//         Header: "Phone",
+//         accessor: "mobileNo"
+//     }
+// ];
 
 const columnsinfo = [
  
@@ -58,9 +59,22 @@ const NoteTable = () => {
   const tableColumns = useMemo(() => columnsinfo, []);
   const tableInstance = useTable({ columns: tableColumns, data });
 
-  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = tableInstance;
+  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = tableInstance; 
+
+  const handleDelete = (_id) => {
+    dispatch(fetchUsersDelete(_id)).then(() => {
+      dispatch(fetchUsers());
+      toast.success('User deleted successfully');
+    }).catch(() => {
+      toast.error('Failed to delete user');
+    });
+  };
+
   return (
     <>
+    
+      <ToastContainer position="top-right" autoClose={2000} />
+
       <div className="bg-[#2a2e57] text-white p-4 rounded-lg shadow-md overflow-auto mt-[152px]">
 
         <h2 className="text-2xl font-bold mb-4">Notes</h2>
@@ -92,6 +106,18 @@ const NoteTable = () => {
                       </td>
                     ))
                   }
+                  
+                    <td className="px-4 py-2 border-b border-gray-700">
+                      <button
+                        className='bg-blue-500 text-white p-2 rounded hover:bg-blue-600 mr-[10px]'
+                       
+                      >
+                        Edit
+                      </button>
+                      <button
+                        className='bg-red-500 text-white p-2 rounded hover:bg-red-600'
+                        onClick={() => handleDelete(row.original._id)}>Delete </button>
+                    </td>
                 </tr>
               )
 

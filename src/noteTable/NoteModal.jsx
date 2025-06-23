@@ -4,7 +4,7 @@ import { saveUser } from '../redux/slices/Userslice';
 
 const NoteModal = ({ isOpen, onClose }) => {
     const dispatch = useDispatch();
-const { loading, error } = useSelector((state) => state.users || {});
+    const { error } = useSelector((state) => state.users || {});
     const [formData, setFormData] = useState({
         id: Date.now(), // Add unique ID
         name: '',
